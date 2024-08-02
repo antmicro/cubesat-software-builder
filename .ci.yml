@@ -39,15 +39,15 @@ zephyr-3.6:
 
 
     # build leon3
-    - west build -p -b gr716a_mini $CI_PROJECT_DIR/software/leon3
+    - west build --pristine -b gr716a_mini $CI_PROJECT_DIR/software/leon3
     - cp build/zephyr/zephyr.elf $CI_PROJECT_DIR/artifacts/leon3.elf
 
     # build obc
-    - west build -p -b nucleo_g474re $CI_PROJECT_DIR/software/obc
+    - west build --pristine -b nucleo_g474re $CI_PROJECT_DIR/software/obc
     - cp build/zephyr/zephyr.elf $CI_PROJECT_DIR/artifacts/obc.elf
 
     # build pmc
-    - west build -p -b nucleo_g474re $CI_PROJECT_DIR/software/pmc
+    - west build --pristine -b nucleo_g474re $CI_PROJECT_DIR/software/pmc
     - cp build/zephyr/zephyr.elf $CI_PROJECT_DIR/artifacts/pmc.elf
 
   artifacts:
