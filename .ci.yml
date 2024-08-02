@@ -1,7 +1,7 @@
-# Triggered only after MR is created/modified/closed and on master
+# Triggered only after MR is created/modified/closed and on main
 .common_only: &common_only
   only:
-    - master
+    - main
     - merge_requests
     - schedules
   except:
