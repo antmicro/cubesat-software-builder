@@ -1,0 +1,17 @@
+&i2c2 {
+    temp: sht4x@44 {
+        status = "okay";
+        compatible = "sensirion,sht4x";
+        reg = <0x44>;
+        repeatability = <2>;
+    };
+    pinctrl-0 = <&i2c2_scl_pa9 &i2c2_sda_pa8>;
+    pinctrl-names = "default";
+    status = "okay";
+};
+
+&usart3 {
+    pinctrl-0 = <&usart3_rx_pc11 &usart3_tx_pc10>;
+    pinctrl-names = "default";
+    status = "okay";
+};

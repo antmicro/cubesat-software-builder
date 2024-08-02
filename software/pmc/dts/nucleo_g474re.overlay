@@ -1,0 +1,15 @@
+&usart2 {
+    status = "okay";
+    pinctrl-0 = <&usart2_rx_pa15 &usart2_tx_pa14>;
+    pinctrl-names = "default";
+};
+
+&usart3 {
+    status = "okay";
+    pinctrl-0 = <&usart3_rx_pc11 &usart3_tx_pc10>;
+    pinctrl-names = "default";
+};
+
+&green_led {
+    gpios = <&gpiob 0 GPIO_ACTIVE_HIGH>;
+};
