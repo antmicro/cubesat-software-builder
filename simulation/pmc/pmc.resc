@@ -2,7 +2,7 @@ using sysbus
 
 mach create "Processing Module Controller"
 
-machine LoadPlatformDescription $base_url/pmc/nucleo_g474re.repl
+include_file "pmc/nucleo_g474re.repl"
 
 showAnalyzer lpuart1
 
@@ -12,7 +12,7 @@ py "monitor.Machine['sysbus.gpioa'].Connections[0].AddStateChangedHook(lambda st
 
 macro reset
 """
-    sysbus LoadELF $base_url/pmc/pmc.elf
+    sysbus LoadELF `fetch_file "pmc/pmc.elf"`
     cpu0 VectorTableOffset `sysbus GetSymbolAddress "_vector_table"`
 """
 

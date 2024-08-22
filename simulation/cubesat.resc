@@ -1,23 +1,48 @@
-$base_url?=@https://raw.githubusercontent.com/antmicro/cubesat-software-builder/main/simulation
-i $base_url/PowerSequencer.cs
+python
+"""
+from Antmicro.Renode.Logging import Logger, LogLevel
+from Antmicro.Renode.Core.EmulationManager import Instance as EmulationManager
+from Antmicro.Renode.Utilities.TemporaryFilesManager import Instance as TemporaryFilesManager
+
+import urllib
+
+def fetch_url(uri):
+    suffix = uri.split('.')[-1]
+    file_path = TemporaryFilesManager.GetTemporaryFile('.' + suffix)
+    Logger.Log(LogLevel.Info, 'Downloading %s' % uri)
+    urllib.urlretrieve(uri, file_path)
+    return file_path
+
+def mc_fetch_file(path):
+    full_url = 'https://raw.githubusercontent.com/antmicro/cubesat-software-builder/main/simulation/' + path
+    file_path = fetch_url(full_url)
+    print '@' + file_path
+
+def mc_include_file(path):
+    full_url = 'https://raw.githubusercontent.com/antmicro/cubesat-software-builder/main/simulation/' + path
+    file_path = fetch_url(full_url)
+    self.Parse('include @' + file_path)
+"""
+
+include_file "PowerSequencer.cs"
 
 emulation CreateUARTHub "temperatureChannel"
 emulation CreateUARTHub "voltageChannel"
 emulation CreateGPIOConnector "pseq_connector"
 
-i $base_url/obc/obc.resc
+include_file "obc/obc.resc"
 connector Connect sysbus.usart3 temperatureChannel
 
-i $base_url/leon3/leon3.resc
+include_file "leon3/leon3.resc"
 connector Connect sysbus.uart2 voltageChannel
 
-i $base_url/pmc/pmc.resc
+include_file "pmc/pmc.resc"
 connector Connect sysbus.usart2 temperatureChannel
 connector Connect sysbus.usart3 voltageChannel
 pseq_connector AttachTo gpioa
 pseq_connector SelectSourcePin gpioa 0
 
-i $base_url/polarfire/polarfire.resc
+include_file "polarfire/polarfire.resc"
 machine LoadPlatformDescriptionFromString "pseq: Miscellaneous.PowerSequencer @ sysbus { cpu1: e51; cpu2: u54_1; cpu3: u54_2; cpu4: u54_3; cpu5: u54_4 }"
 pseq_connector AttachTo pseq
 pseq_connector SelectDestinationPin pseq 0

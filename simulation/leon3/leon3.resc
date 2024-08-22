@@ -2,7 +2,7 @@ using sysbus
 
 mach create "LEON3 Coprocessor"
 
-machine LoadPlatformDescription $base_url/leon3/gr716a_mini.repl
+include_file "leon3/gr716a_mini.repl"
 
 showAnalyzer uart0
 
@@ -20,7 +20,7 @@ py $set_voltage_py
 
 macro reset
 """
-    sysbus LoadELF $base_url/leon3/leon3.elf
+    sysbus LoadELF `fetch_file "leon3/leon3.elf"`
 """
 
 runMacro $reset

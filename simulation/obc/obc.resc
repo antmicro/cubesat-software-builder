@@ -2,13 +2,13 @@ using sysbus
 
 mach create "OBC Controller"
 
-machine LoadPlatformDescription $base_url/obc/nucleo_g474re.repl
+include_file "obc/nucleo_g474re.repl"
 
 showAnalyzer lpuart1
 
 macro reset
 """
-    sysbus LoadELF $base_url/obc/obc.elf
+    sysbus LoadELF `fetch_file "obc/obc.elf"`
     cpu0 VectorTableOffset `sysbus GetSymbolAddress "_vector_table"`
 """
 

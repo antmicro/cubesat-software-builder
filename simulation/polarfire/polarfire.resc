@@ -11,11 +11,11 @@ envmData:
 showAnalyzer mmuart0
 showAnalyzer mmuart1
 
-machine SdCardFromFile $base_url/polarfire/emmc.img mmc 0x100000000
+machine SdCardFromFile `fetch_file "polarfire/emmc.img"` mmc 0x100000000
 
 macro reset
 """
-    sysbus LoadELF $base_url/polarfire/hss.elf
-    sysbus LoadBinary $base_url/polarfire/fitImage.fit 0x88300000
+    sysbus LoadELF `fetch_file "polarfire/hss.elf"`
+    sysbus LoadBinary `fetch_file "polarfire/fitImage.fit"` 0x88300000
 """
 runMacro $reset
