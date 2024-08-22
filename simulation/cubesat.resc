@@ -1,0 +1,40 @@
+$base_url?=@https://raw.githubusercontent.com/antmicro/cubesat-software-builder/main/simulation
+i $base_url/PowerSequencer.cs
+
+emulation CreateUARTHub "temperatureChannel"
+emulation CreateUARTHub "voltageChannel"
+emulation CreateGPIOConnector "pseq_connector"
+
+i $base_url/obc/obc.resc
+connector Connect sysbus.usart3 temperatureChannel
+
+i $base_url/leon3/leon3.resc
+connector Connect sysbus.uart2 voltageChannel
+
+i $base_url/pmc/pmc.resc
+connector Connect sysbus.usart2 temperatureChannel
+connector Connect sysbus.usart3 voltageChannel
+pseq_connector AttachTo gpioa
+pseq_connector SelectSourcePin gpioa 0
+
+i $base_url/polarfire/polarfire.resc
+machine LoadPlatformDescriptionFromString "pseq: Miscellaneous.PowerSequencer @ sysbus { cpu1: e51; cpu2: u54_1; cpu3: u54_2; cpu4: u54_3; cpu5: u54_4 }"
+pseq_connector AttachTo pseq
+pseq_connector SelectDestinationPin pseq 0
+
+set welcome_msg
+"""
+Welcome to CubeSat Edge Computing System simulation.
+
+For more information, visit https://designer.antmicro.com/projects/cubesat_edge_computing_system
+
+Enter `start` to begin the simulation.
+After that you can interact with two of the sensors to have the PMC boot-up Linux running on the PolarFire SoM.
+
+mach set 0
+i2c2.sht4xd9b52d72767ad Temperature 80
+mach set 1
+set_voltage 2000
+"""
+
+echo $welcome_msg

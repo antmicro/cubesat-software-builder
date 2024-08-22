@@ -1,0 +1,26 @@
+using sysbus
+
+mach create "LEON3 Coprocessor"
+
+machine LoadPlatformDescription $base_url/leon3/gr716a_mini.repl
+
+showAnalyzer uart0
+
+set set_voltage_py
+"""
+uart = monitor.Machine["sysbus.uart1"]
+
+def mc_set_voltage(value):
+    uart.WriteChar((value >> 24) & 0xFF)
+    uart.WriteChar((value >> 16) & 0xFF)
+    uart.WriteChar((value >> 8) & 0xFF)
+    uart.WriteChar(value & 0xFF)
+"""
+py $set_voltage_py
+
+macro reset
+"""
+    sysbus LoadELF $base_url/leon3/leon3.elf
+"""
+
+runMacro $reset
