@@ -5,12 +5,20 @@ from Antmicro.Renode.Core.EmulationManager import Instance as EmulationManager
 from Antmicro.Renode.Utilities.TemporaryFilesManager import Instance as TemporaryFilesManager
 
 import urllib
+import ssl
+
+context = ssl.create_default_context()
+context.check_hostname = False
+context.verify_mode = ssl.CERT_NONE
 
 def fetch_url(uri):
     suffix = uri.split('.')[-1]
     file_path = TemporaryFilesManager.GetTemporaryFile('.' + suffix)
-    Logger.Log(LogLevel.Info, 'Downloading %s' % uri)
-    urllib.urlretrieve(uri, file_path)
+    try:
+        Logger.Log(LogLevel.Info, 'Downloading %s' % uri)
+        urllib.urlretrieve(uri, file_path, context=context)
+    except Exception as e:
+        Logger.Log(LogLevel.Error, 'Error occured while downloading {0}: {1}', uri, e)
     return file_path
 
 def mc_fetch_file(path):
